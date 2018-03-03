@@ -11,40 +11,43 @@ namespace THS_Disocrd_Blocker_Configurator
     class FileHandler
     {
         public static string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\THSDiscordBlocker";
-        public static string SettingsFile = AppdataFolder + @"\config.xml";
+        public static string EnabledFile = AppdataFolder + @"\enabled.cfg";
+        public static string PathFile = AppdataFolder + @"\path.cfg";
 
         public static bool CreateFolder()
         {
             Directory.CreateDirectory(AppdataFolder);
-            File.Create(SettingsFile);
+            File.Create(EnabledFile);
+            File.Create(PathFile);
             return true;
         }
 
-        public static bool SaveConfig(bool enabled, string discord)
+        public static bool SaveConfigEnabled(bool input)
         {
-            XmlDocument xdoc = new XmlDocument();
-            if (!File.Exists(discord))
+            if (input)
             {
-                MessageBox.Show("Discord file not valid");
-                return false;
-            }
-            string contents;
-            if (enabled)
-            {
-                contents = @"<ths-discord-config>
-                            <enabled>true</enabled>
-                            <path>" + discord + @"</path>
-                            </ths-discord-config>";
+                File.WriteAllText(EnabledFile, "true");
             }
             else
             {
-                contents = @"<ths-discord-config>
-                            <enabled>false</enabled>
-                            <path>" + discord + @"</path>
-                            </ths-discord-config>";
+                File.WriteAllText(EnabledFile, "false");
             }
-            xdoc.LoadXml(contents);
-            xdoc.Save(SettingsFile);
+            return true;
+        }
+
+        public static bool SaveConfigPath(string input)
+        {
+            if (!File.Exists(input))
+            {
+                MessageBox.Show("File doesn't exist (" + input + ")");
+                return false;
+            }
+            else if (!input.EndsWith(".exe"))
+            {
+                MessageBox.Show("Not an executable file");
+                return false;
+            }
+            File.WriteAllText(PathFile, input);
             return true;
         }
     }

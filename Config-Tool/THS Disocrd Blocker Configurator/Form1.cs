@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +19,7 @@ namespace THS_Disocrd_Blocker_Configurator
 
         }
 
-        string CurrentDiscord;
-        bool CurrentEnabled;
+        bool CurrentEnabled = bool.Parse(File.ReadAllText(FileHandler.EnabledFile));
 
         private void enabledB_Click(object sender, EventArgs e)
         {
@@ -27,40 +27,31 @@ namespace THS_Disocrd_Blocker_Configurator
             {
                 enabledB.BackColor = Color.Red;
                 enabledB.Text = "False";
-                FileHandler.SaveConfig(false, CurrentDiscord);
+                FileHandler.SaveConfigEnabled(false);
             }
             else
             {
                 enabledB.BackColor = Color.Green;
                 enabledB.Text = "True";
-                FileHandler.SaveConfig(true, CurrentDiscord);
+                FileHandler.SaveConfigEnabled(true);
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FileHandler.SaveConfig(true, @"C:\Users\eltechron\AppData\Local\DiscordCanary\Update.exe");
+            OpenFileDialog ofd = new OpenFileDialog();
+            DialogResult result = ofd.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+            {
+                string file = ofd.FileName;
+                MessageBox.Show(file);
+                FileHandler.SaveConfigPath(file);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            FileHandler.CreateFolder();
-            System.Threading.Thread.Sleep(500);
-            XmlReader.Return r = new XmlReader.Return();
-            r = XmlReader.ReadXml();
-            CurrentEnabled = r.enabled;
-            CurrentDiscord = r.path;
-            if (!CurrentEnabled)
-            {
-                enabledB.BackColor = Color.Red;
-                enabledB.Text = "False";
-            }
-            else
-            {
-                enabledB.BackColor = Color.Green;
-                enabledB.Text = "True";
-            }
-            exeTB.Text = r.path;
+
         }
     }
 }
