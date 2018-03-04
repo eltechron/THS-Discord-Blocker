@@ -19,22 +19,22 @@ namespace THS_Disocrd_Blocker_Configurator
 
         }
 
-        bool CurrentEnabled = bool.Parse(File.ReadAllText(FileHandler.EnabledFile));
+        //bool CurrentEnabled = bool.Parse(File.ReadAllText(FileHandler.EnabledFile));
 
         private void enabledB_Click(object sender, EventArgs e)
         {
-            if (CurrentEnabled)
-            {
-                enabledB.BackColor = Color.Red;
-                enabledB.Text = "False";
-                FileHandler.SaveConfigEnabled(false);
-            }
-            else
-            {
-                enabledB.BackColor = Color.Green;
-                enabledB.Text = "True";
-                FileHandler.SaveConfigEnabled(true);
-            }
+            //if (CurrentEnabled)
+            //{
+            //    enabledB.BackColor = Color.Red;
+            //    enabledB.Text = "False";
+            //    FileHandler.SaveConfigEnabled(false);
+            //}
+            //else
+            //{
+            //    enabledB.BackColor = Color.Green;
+            //    enabledB.Text = "True";
+            //    FileHandler.SaveConfigEnabled(true);
+            //}
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -31,7 +31,7 @@ namespace THS_Discord_Blocker
             //Detect if connected to Heights network
             if (connectedSsids.Contains("THS-Students") || connectedSsids.Contains("THS-Secure") || connectedSsids.Contains("Achilleus"))
             {
-                MessageBox.Show("Heights network detected");
+                NotifyIcon.ni_notify(5000, "Heights Network Detected", "Discord will not open.", ToolTipIcon.Info);
                 //Block Discord if already open?
                 Environment.Exit(-1);
             }
@@ -48,7 +48,7 @@ namespace THS_Discord_Blocker
             
             if (!File.Exists(discordPath))
             {
-                MessageBox.Show("Config corrupt, run config tool again");
+                NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
                 Environment.Exit(-1);
             }
 
@@ -56,11 +56,19 @@ namespace THS_Discord_Blocker
 
             if (!path.EndsWith(".exe"))
             {
-                MessageBox.Show("Not an executable file");
+                NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
                 Environment.Exit(-1);
             }
 
-            Process.Start(path, "--processStart Discord.exe");
+            if (path.Contains("Canary"))
+            {
+                MessageBox.Show("Canary detected");
+                Process.Start(path, "--processStart DiscordCanary.exe");
+            }
+            else
+            {
+                Process.Start(path, "--processStart Discord.exe");
+            }
         }
     }
 }
