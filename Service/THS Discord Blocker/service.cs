@@ -12,8 +12,22 @@ namespace THS_Discord_Blocker
 {
     class service
     {
+
+        public static string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\THSDiscordBlocker";
+        public static string discordPath = AppdataFolder + @"\path.cfg";
+
         public static void serviceInit()
         {
+            //Check if Discord is already open, if so, kill it with fire!
+            if (discordPath.Contains("Canary"))
+            {
+                killDiscord(true);
+            }
+            else
+            {
+                killDiscord(false);
+            }
+
             //Get SSID(s)
             WlanClient wlan = new WlanClient();
             Collection<String> connectedSsids = new Collection<string>();
@@ -42,10 +56,7 @@ namespace THS_Discord_Blocker
         }
 
         public static void openDiscord()
-        { 
-            string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\THSDiscordBlocker";
-            string discordPath = AppdataFolder + @"\path.cfg";
-            
+        {
             if (!File.Exists(discordPath))
             {
                 NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
@@ -70,6 +81,70 @@ namespace THS_Discord_Blocker
                 Process.Start(path, "--processStart Discord.exe");
             }
         }
+
+        public static bool killDiscord(bool canary)
+        {
+            foreach (Process proc in Process.GetProcesses())
+            {
+                if (proc.ProcessName == "Discord")
+                {
+                    proc.Kill();
+
+                }
+                else if (proc.ProcessName == "DiscordCanary")
+                {
+                    proc.Kill();
+                }
+            }
+            List<Process> procs = new List<Process>();
+            foreach (Process proc in Process.GetProcesses())
+            {
+                procs.Add(proc);
+            }
+            bool discordLeft;
+            foreach (Process proc in procs)
+            {
+                if (proc.ProcessName == "DiscordCanary" || proc.ProcessName == "Discord")
+                {
+                    discordLeft = true;
+                    NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
+                    return false;
+                }
+            }
+            NotifyIcon.ni_notify(5000, "Discord process killed", "We killed Discord BOIIIII", ToolTipIcon.Info);
+            return true;
+
+            //    if (canary)
+            //    {
+            //        try
+            //        {
+            //            Process[] proc = Process.GetProcessesByName("DiscordCanary.exe");
+            //            proc[0].Kill();
+            //            return true;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
+            //            MessageBox.Show(ex.Message);
+            //            return false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        try
+            //        {
+            //            Process[] proc = Process.GetProcessesByName("Discord.exe");
+            //            proc[0].Kill();
+            //            return true;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
+            //            MessageBox.Show(ex.Message);
+            //            return false;
+            //        }
+            //    }
+            //}
+        }
     }
 }
-
