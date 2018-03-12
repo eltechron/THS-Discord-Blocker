@@ -110,8 +110,8 @@ namespace THS_Discord_Blocker
                     NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
                     return false;
                 }
+            //NotifyIcon.ni_notify(5000, "Discord process killed", "We killed Discord BOIIIII", ToolTipIcon.Info);
             }
-            NotifyIcon.ni_notify(5000, "Discord process killed", "We killed Discord BOIIIII", ToolTipIcon.Info);
             return true;
 
             //    if (canary)
