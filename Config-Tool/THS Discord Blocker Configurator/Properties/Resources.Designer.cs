@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace THS_Disocrd_Blocker_Configurator.Properties
+namespace THS_Discord_Blocker_Configurator.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace THS_Disocrd_Blocker_Configurator.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("THS_Disocrd_Blocker_Configurator.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("THS_Discord_Blocker_Configurator.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

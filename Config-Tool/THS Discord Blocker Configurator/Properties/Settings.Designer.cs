@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace THS_Disocrd_Blocker_Configurator.Properties
+namespace THS_Discord_Blocker_Configurator.Properties
 {
 
 
