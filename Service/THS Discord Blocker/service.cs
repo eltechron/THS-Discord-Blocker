@@ -39,7 +39,7 @@ namespace THS_Discord_Blocker
             }
             foreach (string s in connectedSsids)
             {
-                MessageBox.Show(s);
+        
             }
 
             //Detect if connected to Heights network
@@ -72,8 +72,7 @@ namespace THS_Discord_Blocker
             }
 
             if (path.Contains("Canary"))
-            {
-                MessageBox.Show("Canary detected");
+            { 
                 Process.Start(path, "--processStart DiscordCanary.exe");
             }
             else
@@ -84,33 +83,24 @@ namespace THS_Discord_Blocker
 
         public static bool killDiscord(bool canary)
         {
-            foreach (Process proc in Process.GetProcesses())
+            try
             {
-                if (proc.ProcessName == "Discord")
+                foreach (Process proc in Process.GetProcesses())
                 {
-                    proc.Kill();
+                    if (proc.ProcessName == "Discord")
+                    {
+                        proc.Kill();
 
-                }
-                else if (proc.ProcessName == "DiscordCanary")
-                {
-                    proc.Kill();
+                    }
+                    else if (proc.ProcessName == "DiscordCanary")
+                    {
+                        proc.Kill();
+                    }
                 }
             }
-            List<Process> procs = new List<Process>();
-            foreach (Process proc in Process.GetProcesses())
+            catch
             {
-                procs.Add(proc);
-            }
-            bool discordLeft;
-            foreach (Process proc in procs)
-            {
-                if (proc.ProcessName == "DiscordCanary" || proc.ProcessName == "Discord")
-                {
-                    discordLeft = true;
-                    NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
-                    return false;
-                }
-            //NotifyIcon.ni_notify(5000, "Discord process killed", "We killed Discord BOIIIII", ToolTipIcon.Info);
+                return false;
             }
             return true;
 
