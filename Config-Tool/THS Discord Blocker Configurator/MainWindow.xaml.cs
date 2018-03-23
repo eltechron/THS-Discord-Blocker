@@ -73,20 +73,64 @@ namespace THS_Discord_Blocker_Configurator
         {
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Discord";
             string appdataC = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\DiscordCanary";
-            if (Directory.Exists(appdataC))
+            if (Directory.Exists(appdataC) && !Directory.Exists(appdata))
             {
-                if (File.Exists("Update.exe"))
+                if (File.Exists(appdataC + @"\Update.exe"))
                 {
-                    System.Diagnostics.Process.Start("Update.exe --processStart DiscordCanary.exe");
+                    MessageBox.Show("Discord Canary path found and is set.");
+                    File.WriteAllText(discordPath, appdataC + @"\Update.exe");
+                    discordPathB.Text = appdataC + @"\Update.exe";
+                }
+                else
+                {
+                    MessageBox.Show("Corrupt installation found. No action will be taken");
                 }
             }
-            else if (Directory.Exists(appdata))
+            else if (Directory.Exists(appdata) && !Directory.Exists(appdataC))
             {
-
+                if (File.Exists(appdata + @"\Update.exe"))
+                {
+                    MessageBox.Show("Discord path found and is set.");
+                    File.WriteAllText(discordPath, appdata + @"\Update.exe");
+                    discordPathB.Text = appdata + @"\Update.exe";
+                }
+                else
+                {
+                    MessageBox.Show("Corrupt installation found. No action will be taken");
+                }
+            }
+            else if (Directory.Exists(appdata) && Directory.Exists(appdataC))
+            {
+                if (MessageBox.Show("Both Discord normal and Discord Canary found. Use Canary over normal Discord?", "THS Discord Blocker", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    if (File.Exists(appdataC + @"\Update.exe"))
+                    {
+                        MessageBox.Show("Discord Canary path found and is set.");
+                        File.WriteAllText(discordPath, appdataC + @"\Update.exe");
+                        discordPathB.Text = appdataC + @"\Update.exe";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Corrupt installation found. No action will be taken");
+                    }
+                }
+                else
+                {
+                    if (File.Exists(appdata + @"\Update.exe"))
+                    {
+                        MessageBox.Show("Discord path found and is set.");
+                        File.WriteAllText(discordPath, appdata + @"\Update.exe");
+                        discordPathB.Text = appdata + @"\Update.exe";
+                    }
+                    else
+                    {
+                        MessageBox.Show("Corrupt installation found. No action will be taken");
+                    }
+                }
             }
             else
             {
-                MessageBox.Show("Discord could not be found.");
+                MessageBox.Show("Discord not found. Please select it manually.");
             }
         }
     }
