@@ -43,7 +43,7 @@ namespace THS_Discord_Blocker
             }
 
             //Detect if connected to Heights network
-            if (!connectedSsids.Contains("THS-Students") || connectedSsids.Contains("THS-Secure") || connectedSsids.Contains("Achilleus"))
+            if (connectedSsids.Contains("THS-Students") || connectedSsids.Contains("THS-Secure") || connectedSsids.Contains("Achilleus"))
             {
                 NotifyIcon.ni_notify(5000, "Heights Network Detected", "Discord will not open.", ToolTipIcon.Info);
                 //Block Discord if already open?
