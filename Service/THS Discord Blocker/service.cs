@@ -1,4 +1,10 @@
-﻿using NativeWifi;
+﻿///
+/// THS Discord Blocker
+/// Written by Liesel Downes
+/// Licensed under the MIT License
+/// 
+
+using NativeWifi;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,131 +16,122 @@ using System.IO;
 using System.Diagnostics;
 namespace THS_Discord_Blocker
 {
-    class service
+    class Service
     {
 
-        public static string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\THSDiscordBlocker";
-        public static string discordPath = AppdataFolder + @"\path.cfg";
+        //Paths
+        /*Service AppData*/ public static string AppdataFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\THSDiscordBlocker";
+        /*Service Config (In appdata)*/ public static string ConfigPath = AppdataFolder + @"\path.cfg";
 
-        public static void serviceInit()
+        public static void ServiceInit()
         {
-            //Check if Discord is already open, if so, kill it with fire!
-            if (discordPath.Contains("Canary"))
-            {
-                killDiscord(true);
-            }
-            else
-            {
-                killDiscord(false);
-            }
-
+            Logger.Log("Service started.");
             //Get SSID(s)
             WlanClient wlan = new WlanClient();
-            Collection<String> connectedSsids = new Collection<string>();
-
+            Collection<String> connectedSsiDs = new Collection<string>();  
             foreach (WlanClient.WlanInterface wlanInterface in wlan.Interfaces)
             {
                 Wlan.Dot11Ssid ssid = wlanInterface.CurrentConnection.wlanAssociationAttributes.dot11Ssid;
-                connectedSsids.Add(new String(Encoding.ASCII.GetChars(ssid.SSID, 0, (int)ssid.SSIDLength)));
+                connectedSsiDs.Add(new String(Encoding.ASCII.GetChars(ssid.SSID, 0, (int)ssid.SSIDLength)));
             }
-            foreach (string s in connectedSsids)
+
+            Logger.Log("SSIDS found below:");
+            foreach (string ssid in connectedSsiDs)
             {
-        
+                Logger.Log(ssid);
             }
 
             //Detect if connected to Heights network
-            if (connectedSsids.Contains("THS-Students") || connectedSsids.Contains("THS-Secure") || connectedSsids.Contains("Achilleus"))
+            if (connectedSsiDs.Contains("THS-Students") || connectedSsiDs.Contains("THS-Secure") || connectedSsiDs.Contains("Achilleus"))
             {
-                NotifyIcon.ni_notify(5000, "Heights Network Detected", "Discord will not open.", ToolTipIcon.Info);
-                //Block Discord if already open?
+                //Notify Discord will not open and quit service
+                Logger.Log("Network found!");
+                KillDiscord();
+                NotifyIcon.NotifyIconNotify(5000, "Heights Network Detected", "Discord will not open.", ToolTipIcon.Info);
                 Environment.Exit(-1);
             }
-            else
+            else 
             {
-                openDiscord();
+                Logger.Log("No network found.");
+                //Open Discord and quit service
+                OpenDiscord();
+                Environment.Exit(-1);
             }
         }
 
-        public static void openDiscord()
+        public static void OpenDiscord()
         {
-            if (!File.Exists(discordPath))
+            //Check if config doesn't exist
+            if (!File.Exists(ConfigPath))
             {
-                NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
+                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
                 Environment.Exit(-1);
             }
 
-            string path = File.ReadAllText(discordPath);
+            //Read config and get path
+            string path = File.ReadAllText(ConfigPath);
 
+            //Check if someone didn't select an executable
             if (!path.EndsWith(".exe"))
             {
-                NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
+                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
                 Environment.Exit(-1);
             }
 
+            //Check whether Canary is installed or not
             if (path.Contains("Canary"))
             { 
+                //Start it
                 Process.Start(path, "--processStart DiscordCanary.exe");
+                Logger.Log("Discord Canary start from " + path);
             }
             else
             {
+                //Start it
                 Process.Start(path, "--processStart Discord.exe");
+                Logger.Log("Discord start from " + path);
             }
         }
 
-        public static bool killDiscord(bool canary)
+        public static void KillDiscord()
         {
             try
             {
+                //Get processes
                 foreach (Process proc in Process.GetProcesses())
                 {
+                    //Check if canary or normal
                     if (proc.ProcessName == "Discord")
                     {
                         proc.Kill();
+                        Logger.Log("Discord Killed " + proc);
 
                     }
                     else if (proc.ProcessName == "DiscordCanary")
                     {
                         proc.Kill();
+                        Logger.Log("Discord Killed " + proc);
                     }
                 }
             }
-            catch
+            catch (InvalidOperationException ioe)
             {
-                return false;
+                //Notify user of error
+                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Error while killing Discord. Error info has been logged.", ToolTipIcon.Error);
+                Logger.Log(ioe.Message + " " + ioe.HelpLink);
             }
-            return true;
-
-            //    if (canary)
-            //    {
-            //        try
-            //        {
-            //            Process[] proc = Process.GetProcessesByName("DiscordCanary.exe");
-            //            proc[0].Kill();
-            //            return true;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
-            //            MessageBox.Show(ex.Message);
-            //            return false;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        try
-            //        {
-            //            Process[] proc = Process.GetProcessesByName("Discord.exe");
-            //            proc[0].Kill();
-            //            return true;
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            NotifyIcon.ni_notify(5000, "THS Discord Blocker Error", "We attempted to close Discord but the attempt failed. Oops.", ToolTipIcon.Error);
-            //            MessageBox.Show(ex.Message);
-            //            return false;
-            //        }
-            //    } 
-            //}
+            catch (NotSupportedException ise)
+            {
+                //Notify user of error
+                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Error while killing Discord. Error info has been logged.", ToolTipIcon.Error);
+                Logger.Log(ise.Message + " " + ise.HelpLink);
+            }
+            catch (Exception ex)
+            {
+                //Notify user of error
+                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Error while killing Discord. Error info has been logged.", ToolTipIcon.Error);
+                Logger.Log(ex.Message + " " + ex.HelpLink);
+            }
         }
     }
 }

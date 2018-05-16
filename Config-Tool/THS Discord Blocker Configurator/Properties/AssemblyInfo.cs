@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("THS Discord Blocker Configurator")]
-[assembly: AssemblyCopyright("Copyright © Joshua Downes 2018")]
+[assembly: AssemblyCopyright("Copyright © Liesel Downes 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("THS Discord Blocker Service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("eltechron")]
 [assembly: AssemblyProduct("THS Discord Blocker Service")]
-[assembly: AssemblyCopyright("Copyright © Joshua Downes 2018")]
+[assembly: AssemblyCopyright("Copyright © Liesel Downes 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

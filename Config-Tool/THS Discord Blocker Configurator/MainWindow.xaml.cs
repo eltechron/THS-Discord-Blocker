@@ -42,6 +42,8 @@ namespace THS_Discord_Blocker_Configurator
             {
                 discordPathB.Text = "Not set";
             }
+
+            VersionLabel.Content = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -133,5 +135,7 @@ namespace THS_Discord_Blocker_Configurator
                 MessageBox.Show("Discord not found. Please select it manually.");
             }
         }
+        
+        
     }
 }

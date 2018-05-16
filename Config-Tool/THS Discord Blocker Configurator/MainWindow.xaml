@@ -16,6 +16,8 @@
         <Button Margin="5" Click="Button_Click">Browse for Discord Path</Button>
         <TextBlock TextWrapping="Wrap" Text="Typically you can select the Discord shortcut in the 'Desktop' folder and that will select the correct .exe file"></TextBlock>
         <Button IsEnabled="True" Margin="5" Click="Button_Click_1">Attempt to find Discord path automatically</Button>
-        <Label Content="This doesn't work right now"></Label>
+        <Label x:Name="VersionLabel" VerticalAlignment="Bottom" Content=""></Label>
+        <Label Content="Made by Liesel Downes" VerticalAlignment="Bottom"></Label>
+        
     </StackPanel>
 </Controls:MetroWindow>

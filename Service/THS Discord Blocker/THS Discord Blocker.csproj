@@ -52,11 +52,11 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Interop.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="NotifyIcon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="service.cs" />
-    <None Include="WifiExample\WifiExample.cs" />
+    <Compile Include="Service.cs" />
     <Compile Include="WlanApi.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -80,9 +80,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="WifiExample\WifiExample.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon1.ico" />

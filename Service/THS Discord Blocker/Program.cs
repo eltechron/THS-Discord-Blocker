@@ -16,7 +16,7 @@ namespace THS_Discord_Blocker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            service.serviceInit();
+            Service.ServiceInit();
             Application.Run();
         }
     }
