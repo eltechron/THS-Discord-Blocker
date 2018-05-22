@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿///
+/// THS Discord Blocker
+/// Written by Liesel Downes
+/// Licensed under the MIT License
+/// 
+
+using System;
 using System.Windows.Forms;
 
 namespace THS_Discord_Blocker
@@ -16,7 +18,7 @@ namespace THS_Discord_Blocker
             Application.Exit();
         }
 
-        public static void NotifyIconNotify(int time, string title, string content, System.Windows.Forms.ToolTipIcon icon)
+        public static void NotifyIconNotify(int time, string title, string content, ToolTipIcon icon)
         {
             NotifyI.Icon = Properties.Resources.Icon1;
             NotifyI.Visible = true;

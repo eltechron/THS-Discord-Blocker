@@ -4,13 +4,11 @@
 /// Licensed under the MIT License
 /// 
 
+
 using NativeWifi;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
@@ -41,8 +39,9 @@ namespace THS_Discord_Blocker
                 Logger.Log(ssid);
             }
 
+            //TODO: Custom SSIDs from config tool IN APP WIFI BLOCKER
             //Detect if connected to Heights network
-            if (connectedSsiDs.Contains("THS-Students") || connectedSsiDs.Contains("THS-Secure") || connectedSsiDs.Contains("Achilleus"))
+            if (connectedSsiDs.Contains("THS-Students") || connectedSsiDs.Contains("THS-Secure"))
             {
                 //Notify Discord will not open and quit service
                 Logger.Log("Network found!");
@@ -64,18 +63,20 @@ namespace THS_Discord_Blocker
             //Check if config doesn't exist
             if (!File.Exists(ConfigPath))
             {
-                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
-                Environment.Exit(-1);
+                ConfigToolDialog configToolDialog = new ConfigToolDialog();
+                configToolDialog.ShowDialog();
+                return;
             }
 
             //Read config and get path
             string path = File.ReadAllText(ConfigPath);
 
-            //Check if someone didn't select an executable
+            //Check if someone didn't select an executable (or my code failed like usual lol)
             if (!path.EndsWith(".exe"))
             {
-                NotifyIcon.NotifyIconNotify(5000, "THS Discord Blocker Error", "Config corrupt, please run the config tool again.", ToolTipIcon.Error);
-                Environment.Exit(-1);
+                ConfigToolDialog configToolDialog = new ConfigToolDialog();
+                configToolDialog.ShowDialog();
+                return;
             }
 
             //Check whether Canary is installed or not
@@ -112,6 +113,7 @@ namespace THS_Discord_Blocker
                         proc.Kill();
                         Logger.Log("Discord Killed " + proc);
                     }
+                    //TODO: Add Discord Public Test Build
                 }
             }
             catch (InvalidOperationException ioe)
